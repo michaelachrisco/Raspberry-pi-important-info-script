@@ -1,42 +1,26 @@
+#!/bin/bash
+#Michael Chrisco
+#GPL
 #dependency: bc, ifstat
 #sudo apt-get install bc ifstat
 
 echo "PI-INFO:"
 echo "********************"
-
-#default:
-#1) Gives CPU usage
-#2) Gives RAM usage
-#3) Gives Temperature
-#4) Gives ethernet usage
-
-#1) CPU
 #get total idle time and convert into all CPU usage
 ID=`top -b -d 1 -n 1 | grep Cpu | cut -c 37-40`
 echo CPU: $((${ID/.*}*-1+100))% used
-
-#2) RAM
 #Get Ram usage from free and calculate how much used and how much is available
 RAM=`free -m | grep Mem| awk {'print "Total: "$2"MB " " Used: "$3"MB" " Free: "$4 "MB"'}`;
 echo RAM: $RAM
-
-#3) Temperature
+#temp
 echo `vcgencmd measure_temp`
-
-
-#4)
+#network
+echo Snapshot of Network
 ifstat .1 1
-
-#options:
-# -e (exact temperature in milli-celcius
-# -tf (temperature in Farenheit)
-
 
 #exact temperature
 #exact answer
 #temperature_exact=`cat /sys/class/thermal/thermal_zone0/temp`
-
-
 #C into F
 #Ctemp=`vcgencmd measure_temp| egrep "[0-9.]{4,}" -o`
 #echo $temperature_exact milli-degrees_C
